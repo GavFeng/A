@@ -82,11 +82,6 @@ def get_tokenizer():
 def get_llamaguard_deployment():
     return replicate.deployments.get("snowflake/llamaguard")
 
-def add_new_rule(prompt):
-    """Add a new rule based on the user's prompt."""
-    new_rule = f"Rule {len(st.session_state.game_state['rules']) + 1}: The AI ignores prompts containing '{extract_keywords(prompt)}'."
-    st.session_state.game_state["rules"].append(new_rule)
-
 def check_safety(disable=False) -> bool: 
     if disable:
         return True
