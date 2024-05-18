@@ -19,7 +19,7 @@ def get_replicate_api_token():
 
 def display_sidebar_ui():
     with st.sidebar:
-        st.title('Snowflake Arctic')
+        st.title('Guess the Password')
         st.subheader("Adjust model parameters")
         st.slider('temperature', min_value=0.01, max_value=5.0, value=0.3,
                                 step=0.01, key="temperature")
@@ -27,7 +27,7 @@ def display_sidebar_ui():
                           key="top_p")
 
         st.button('Clear chat history', on_click=clear_chat_history)
-
+        st.button('Reset Game', on_click=reset_game)
         st.sidebar.caption('Build your own app powered by Arctic and [enter to win](https://arctic-streamlit-hackathon.devpost.com/) $10k in prizes.')
 
         st.subheader("About")
@@ -36,6 +36,21 @@ def display_sidebar_ui():
         # # # Uncomment to show debug info
         # st.subheader("Debug")
         # st.write(st.session_state)
+
+
+def display_game_state():
+    st.subheader("Game State")
+    if st.session_state.game_state["success"]:
+        st.success("Congratulations! You have convinced the AI to reveal the password!")
+    else:
+        st.info(f"Current Rules: {st.session_state.game_state['rules']}")
+        st.write("User Attempts:")
+        for attempt in st.session_state.game_state["attempts"]:
+            st.write(f"Prompt: {attempt['prompt']}, Feedback: {attempt['feedback']}")
+
+def reset_game():
+    """Reset the game state."""
+    del st.session_state["game_state"]
 
 def clear_chat_history():
     st.session_state.messages = [{"role": "assistant", "content": "Hi. I'm Arctic, a new, efficient, intelligent, and truly open language model created by Snowflake AI Research. Ask me anything."}]
@@ -66,6 +81,11 @@ def get_tokenizer():
 @st.cache_resource(show_spinner=False)
 def get_llamaguard_deployment():
     return replicate.deployments.get("snowflake/llamaguard")
+
+def add_new_rule(prompt):
+    """Add a new rule based on the user's prompt."""
+    new_rule = f"Rule {len(st.session_state.game_state['rules']) + 1}: The AI ignores prompts containing '{extract_keywords(prompt)}'."
+    st.session_state.game_state["rules"].append(new_rule)
 
 def check_safety(disable=False) -> bool: 
     if disable:
@@ -156,3 +176,4 @@ def generate_arctic_response():
 
 if __name__ == "__main__":
     main()
+    
