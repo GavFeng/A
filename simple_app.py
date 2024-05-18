@@ -6,6 +6,15 @@ from transformers import AutoTokenizer
 # Set assistant icon to Snowflake logo
 icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️"}
 
+
+# Initialize session state for game
+if "game_state" not in st.session_state:
+    st.session_state["game_state"] = {
+        "password": "arctic",  # initial password
+        "guessed": [],
+        "rules": []
+    }
+
 # App title
 st.set_page_config(page_title="Snowflake Arctic")
 
@@ -34,24 +43,26 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"], avatar=icons[message["role"]]):
         st.write(message["content"])
 
+# Function to clear chat history
 def clear_chat_history():
     st.session_state.messages = [{"role": "assistant", "content": "Hi. I'm Arctic, a new, efficient, intelligent, and truly open language model created by Snowflake AI Research. Ask me anything."}]
+    st.session_state["game_state"]["guessed"] = []
+    st.session_state["game_state"]["rules"] = []
     
+# Function to reset the game state
 def reset_game():
-    """Reset the game state."""
-    del st.session_state["game_state"]
-    
+    st.session_state["game_state"] = {
+        "password": "arctic",
+        "guessed": [],
+        "rules": []
+    }
 
+    
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.button('Reset Game', on_click=reset_game)
-st.sidebar.caption('Built by [Snowflake](https://snowflake.com/) to demonstrate [Snowflake Arctic](https://www.snowflake.com/blog/arctic-open-and-efficient-foundation-language-models-snowflake). App hosted on [Streamlit Community Cloud](https://streamlit.io/cloud). Model hosted by [Replicate](https://replicate.com/snowflake/snowflake-arctic-instruct).')
-st.sidebar.caption('Build your own app powered by Arctic and [enter to win](https://arctic-streamlit-hackathon.devpost.com/) $10k in prizes.')
 
 @st.cache_resource(show_spinner=False)
 def get_tokenizer():
-    """Get a tokenizer to make sure we're not sending too much text
-    text to the Model. Eventually we will replace this with ArcticTokenizer
-    """
     return AutoTokenizer.from_pretrained("huggyllama/llama-7b")
 
 def get_num_tokens(prompt):
@@ -92,6 +103,23 @@ if prompt := st.chat_input(disabled=not replicate_api):
     with st.chat_message("user", avatar="⛷️"):
         st.write(prompt)
 
+# Check guesses and update game state
+def check_guess(prompt):
+    guessed = st.session_state["game_state"]["guessed"]
+    password = st.session_state["game_state"]["password"]
+    if password in prompt:
+        guessed.append(password)
+        # Add a new rule
+        new_rule = f"New rule added after guessing the password '{password}'"
+        st.session_state["game_state"]["rules"].append(new_rule)
+        st.success(f"Correct guess! The password '{password}' was found.")
+        st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
+
+# Display chat messages
+for message in st.session_state.messages:
+    with st.chat_message(message["role"], avatar="./Snowflake_Logomark_blue.svg" if message["role"] == "assistant" else "⛷️"):
+        st.write(message["content"])
+
 # Generate a new response if last message is not from assistant
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant", avatar="./Snowflake_Logomark_blue.svg"):
@@ -99,3 +127,11 @@ if st.session_state.messages[-1]["role"] != "assistant":
         full_response = st.write_stream(response)
     message = {"role": "assistant", "content": full_response}
     st.session_state.messages.append(message)
+
+# Display game state
+st.sidebar.subheader("Game State")
+st.sidebar.write(f"Current Password Status: {' '.join([letter if letter in st.session_state['game_state']['guessed'] else '_' for letter in st.session_state['game_state']['password']])}")
+st.sidebar.write(f"Guessed Words: {', '.join(st.session_state['game_state']['guessed'])}")
+st.sidebar.write("Rules Added by AI:")
+for rule in st.session_state["game_state"]["rules"]:
+    st.sidebar.write(f"- {rule}")
