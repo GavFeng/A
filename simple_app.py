@@ -116,11 +116,6 @@ def check_guess(prompt):
         st.success(f"Correct guess! The password '{password}' was found.")
         st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
 
-# Display chat messages
-for message in st.session_state.messages:
-    with st.chat_message(message["role"], avatar="./Snowflake_Logomark_blue.svg" if message["role"] == "assistant" else "⛷️"):
-        st.write(message["content"])
-
 # Generate a new response if last message is not from assistant
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant", avatar="./Snowflake_Logomark_blue.svg"):
