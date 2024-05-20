@@ -55,7 +55,7 @@ def Anon_mode():
         st.session_state.Anon_mode = False
         
     if not st.session_state.Anon_mode:
-        st.session_state.messages.append({"role": "assistant", "content": "I am now in privacy mode."})
+        st.session_state.messages.append({"role": "assistant", "content": "I am now in Anonymous mode."})
         st.session_state.Anon_mode = True
         # Change user icon when privacy mode is activated
         icons["user"] = "🕵️‍♂️"  # Example: Change the user icon to sunglasses emoji
