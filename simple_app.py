@@ -112,7 +112,7 @@ def check_guess(prompt):
         # Add a new rule
         new_rule = f"New rule added after guessing the password '{password}'"
         st.session_state["game_state"]["rules"].append(new_rule)
-        st.success(f"Correct guess! The password '{password}' was found.")
+        st.session_state.messages = [{"role": "assistant", "content": "Correct guess! The password '{password}' was found."}]
         st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
 
 # Generate a new response if last message is not from assistant
