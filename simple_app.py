@@ -81,7 +81,7 @@ def timeout_mode():
         st.session_state.messages.append({"role": "assistant", "content": "Automatic timeout mode disabled."})
         st.session_state.timeout_mode = False
         
-    if st.session_state.timeout_mode:
+    while st.session_state.timeout_mode:
         check_inactivity()
 
 
