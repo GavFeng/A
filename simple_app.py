@@ -4,7 +4,7 @@ import os
 from transformers import AutoTokenizer
 
 # Set assistant icon to Snowflake logo
-icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️"}
+icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️", "user_anon": "🕵️‍♂️"}
 
 # App title
 st.set_page_config(page_title="Snowflake Arctic")
@@ -57,13 +57,10 @@ def Anon_mode():
     if not st.session_state.Anon_mode:
         st.session_state.messages.append({"role": "assistant", "content": "I am now in Anonymous mode."})
         st.session_state.Anon_mode = True
-        # Change user icon when privacy mode is activated
-        icons["user"] = "🕵️‍♂️"  # Example: Change the user icon to sunglasses emoji
     else:
         st.session_state.messages.append({"role": "assistant", "content": "Privacy mode deactivated."})
         st.session_state.Anon_mode = False
-        # Restore default user icon when privacy mode is deactivated
-        icons["user"] = "⛷️"  # Example: Restore the default user icon
+
 
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.toggle('Privacy', on_change=private_mode)
@@ -110,8 +107,12 @@ def generate_arctic_response():
 # User-provided prompt
 if prompt := st.chat_input(disabled=not replicate_api):
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user", avatar=icons["user"]):
-        st.write(prompt)
+    if st.session_state.Anon_mode:
+        with st.chat_message("user", avatar=icons["user_anon"]):
+            st.write(prompt)
+    else:
+        with st.chat_message("user", avatar=icons["user"]):
+            st.write(prompt)
         
 # Generate a new response if last message is not from assistant
 if st.session_state.messages[-1]["role"] not in ["assistant", "gamemaster"]:
