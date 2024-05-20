@@ -86,6 +86,7 @@ def check_guess(prompt):
         # Add a new rule
         new_rule = f"AAA"
         st.session_state["game_state"]["rules"].append(new_rule)
+        st.session_state.messages = [{"role": "gamemaster", "content": "Hi"}]
         st.session_state.messages.append({"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."})
         with st.chat_message("gamemaster", avatar="🧊"):
             st.write(prompt)
