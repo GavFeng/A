@@ -4,15 +4,7 @@ import os
 from transformers import AutoTokenizer
 
 # Set assistant icon to Snowflake logo
-icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️", "gamemaster": "🧊"}
-
-# Initialize session state for game
-if "game_state" not in st.session_state:
-    st.session_state["game_state"] = {
-        "password": "arctic",  # initial password
-        "guessed": [],
-        "rules": []
-    }
+icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️"}
 
 # App title
 st.set_page_config(page_title="Snowflake Arctic")
@@ -47,24 +39,8 @@ def clear_chat_history():
     st.session_state.messages = [{"role": "assistant", "content": "Hi. I'm Arctic, a new, efficient, intelligent, and truly open language model created by Snowflake AI Research. Ask me anything."}]
     st.session_state.chat_aborted = False
     
-# Function to reset the game state
-def reset_game():
-    st.session_state["game_state"] = {
-        "password": "arctic",
-        "guessed": [],
-        "rules": []
-    }
 
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
-st.sidebar.button('Reset Game', on_click=reset_game)
-
-
-# Display game state
-st.sidebar.subheader("Game State")
-st.sidebar.write(f"Guessed Words: {', '.join(st.session_state['game_state']['guessed'])}")
-st.sidebar.write("Rules Added:")
-for rule in st.session_state["game_state"]["rules"]:
-    st.sidebar.write(f"- {rule}")
 
 
 @st.cache_resource(show_spinner=False)
@@ -77,27 +53,6 @@ def get_num_tokens(prompt):
     tokens = tokenizer.tokenize(prompt)
     return len(tokens)
 
-# Check guesses and update game state
-def check_guess(prompt):
-    guessed = st.session_state["game_state"]["guessed"]
-    password = st.session_state["game_state"]["password"]
-    if password in prompt:
-        guessed.append(password)
-        # Add a new rule
-        new_rule = f"AAA"
-        st.session_state["game_state"]["rules"].append(new_rule)
-        st.session_state.messages = [{"role": "gamemaster", "content": "Hi"}]
-        st.session_state.messages.append({"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."})
-        with st.chat_message("gamemaster", avatar="🧊"):
-            st.write(prompt)
-        st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
-
-# Sidebar for making guesses
-with st.sidebar:
-    st.subheader("Make a Guess")
-    guess = st.text_input("Enter your guess:")
-    if st.button('Submit Guess'):
-        check_guess(guess)
 
 # Function for generating Snowflake Arctic response
 def generate_arctic_response():
