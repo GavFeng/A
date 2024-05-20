@@ -81,8 +81,9 @@ def timeout_mode():
         st.session_state.messages.append({"role": "assistant", "content": "Automatic timeout mode disabled."})
         st.session_state.timeout_mode = False
         
-    if st.session_state.timeout_mode:
+    while st.session_state.timeout_mode:
         check_inactivity()
+        time.sleep(30)
 
 
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
@@ -105,9 +106,6 @@ def check_inactivity():
     if st.session_state.timeout_mode and elapsed_time > TIMEOUT_THRESHOLD:
         # Perform timeout action
         st.session_state.messages.append({"role": "assistant", "content": "Session timed out due to inactivity."})
-
-    # Trigger the script to rerun after a short delay
-    st.experimental_set_query_params(_timeout_refreshed=current_time)
 
 @st.cache_resource(show_spinner=False)
 def get_tokenizer():
