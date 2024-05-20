@@ -7,7 +7,20 @@ from transformers import AutoTokenizer
 icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️", "gamemaster": "🧊"}
 
 
-
+# Check guesses and update game state
+def check_guess(prompt):
+    guessed = st.session_state["game_state"]["guessed"]
+    password = st.session_state["game_state"]["password"]
+    if password in prompt:
+        guessed.append(password)
+        # Add a new rule
+        new_rule = f"AAA"
+        st.session_state["game_state"]["rules"].append(new_rule)
+        message = {"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}
+        st.session_state.messages.append(message)
+        
+        st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
+        
 # Initialize session state for game
 if "game_state" not in st.session_state:
     st.session_state["game_state"] = {
@@ -68,19 +81,6 @@ st.sidebar.write("Rules Added:")
 for rule in st.session_state["game_state"]["rules"]:
     st.sidebar.write(f"- {rule}")
 
-# Check guesses and update game state
-def check_guess(prompt):
-    guessed = st.session_state["game_state"]["guessed"]
-    password = st.session_state["game_state"]["password"]
-    if password in prompt:
-        guessed.append(password)
-        # Add a new rule
-        new_rule = f"AAA"
-        st.session_state["game_state"]["rules"].append(new_rule)
-        message = {"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}
-        st.session_state.messages.append(message)
-        
-        st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
 
 
 # Sidebar for making guesses
