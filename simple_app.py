@@ -50,10 +50,8 @@ def private_mode():
         st.session_state.messages.append({"role": "assistant", "content": "Privacy mode deactivated."})
         st.session_state.private_mode = False
         
-def private_mode():
+def Anon_mode():
     icons["user"] = "🕵️‍♂️" 
-
-        
 
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.toggle('Privacy', on_change=private_mode)
