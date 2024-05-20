@@ -48,28 +48,18 @@ for message in st.session_state.messages:
 def clear_chat_history():
     st.session_state.messages = [{"role": "assistant", "content": "Hi. I'm Arctic, a new, efficient, intelligent, and truly open language model created by Snowflake AI Research. Ask me anything."}]
     st.session_state.chat_aborted = False
-    st.session_state["game_state"]["guessed"] = []
-    st.session_state["game_state"]["rules"] = []
     
 # Function to reset the game state
 def reset_game():
     st.session_state["game_state"] = {
         "password": "arctic",
         "guessed": [],
-        "rules": ["NO"]
+        "rules": []
     }
 
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.button('Reset Game', on_click=reset_game)
 
-
-# Sidebar for making guesses
-with st.sidebar:
-    st.subheader("Make a Guess")
-    guess = st.text_input("Enter your guess:")
-    if st.button('Submit Guess'):
-        st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
-        check_guess(guess)
 
 # Display game state
 st.sidebar.subheader("Game State")
@@ -79,7 +69,6 @@ st.sidebar.write("Rules Added by AI:")
 for rule in st.session_state["game_state"]["rules"]:
     st.sidebar.write(f"- {rule}")
 
-
 # Check guesses and update game state
 def check_guess(prompt):
     guessed = st.session_state["game_state"]["guessed"]
@@ -87,11 +76,20 @@ def check_guess(prompt):
     if password in prompt:
         guessed.append(password)
         # Add a new rule
-        new_rule = f"----"
+        new_rule = f"AAA"
         st.session_state["game_state"]["rules"].append(new_rule)
         st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
         st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
 
+
+# Sidebar for making guesses
+with st.sidebar:
+    st.subheader("Make a Guess")
+    guess = st.text_input("Enter your guess:")
+    if st.button('Submit Guess'):
+        st.session_state["game_state"]["rules"].append("artic")
+        st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
+        check_guess(guess)
 
 
 @st.cache_resource(show_spinner=False)
