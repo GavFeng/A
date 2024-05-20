@@ -88,7 +88,6 @@ with st.sidebar:
     st.subheader("Make a Guess")
     guess = st.text_input("Enter your guess:")
     if st.button('Submit Guess'):
-        st.session_state["game_state"]["rules"].append("new_rule")
         check_guess(guess)
 
 
