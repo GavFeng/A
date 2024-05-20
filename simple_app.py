@@ -8,7 +8,7 @@ import time
 icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️", "user_anon": "🕵️‍♂️"}
 
 # Timeout threshold in seconds
-TIMEOUT_THRESHOLD = 1
+TIMEOUT_THRESHOLD = 10
 
 # Initialize last activity time
 if "last_activity_time" not in st.session_state:
