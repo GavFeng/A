@@ -101,8 +101,7 @@ def check_inactivity():
     # Check if timeout mode is enabled and elapsed time exceeds the timeout threshold
     if st.session_state.timeout_mode and elapsed_time > TIMEOUT_THRESHOLD:
         # Perform timeout action
-        st.session_state.messages = [{"role": "assistant", "content": "Session timed out due to inactivity."}]
-        st.session_state.chat_aborted = True
+        st.session_state.messages.append({"role": "assistant", "content": "Session timed out due to inactivity."})
 
     # Trigger the script to rerun after a short delay
     st.experimental_set_query_params(_timeout_refreshed=current_time)
