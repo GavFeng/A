@@ -63,9 +63,8 @@ st.sidebar.button('Reset Game', on_click=reset_game)
 
 # Display game state
 st.sidebar.subheader("Game State")
-st.sidebar.write(f"Current Password Status: {' '.join([letter if letter in st.session_state['game_state']['guessed'] else '_' for letter in st.session_state['game_state']['password']])}")
 st.sidebar.write(f"Guessed Words: {', '.join(st.session_state['game_state']['guessed'])}")
-st.sidebar.write("Rules Added by AI:")
+st.sidebar.write("Rules Added")
 for rule in st.session_state["game_state"]["rules"]:
     st.sidebar.write(f"- {rule}")
 
@@ -76,8 +75,7 @@ def check_guess(prompt):
     if password in prompt:
         guessed.append(password)
         # Add a new rule
-        new_rule = f"AAA"
-        st.session_state["game_state"]["rules"].append(new_rule)
+        st.session_state["game_state"]["rules"].append("A")
         st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
         st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
 
@@ -87,8 +85,6 @@ with st.sidebar:
     st.subheader("Make a Guess")
     guess = st.text_input("Enter your guess:")
     if st.button('Submit Guess'):
-        st.session_state["game_state"]["rules"].append("artic")
-        st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
         check_guess(guess)
 
 
