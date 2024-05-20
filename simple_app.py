@@ -77,7 +77,9 @@ def check_guess(prompt):
         # Add a new rule
         new_rule = f"AAA"
         st.session_state["game_state"]["rules"].append(new_rule)
-        st.session_state.messages.append({"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."})
+        message = {"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}
+        st.session_state.messages.append(message)
+        
         st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
 
 
