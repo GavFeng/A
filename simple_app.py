@@ -86,6 +86,7 @@ with st.sidebar:
     st.subheader("Make a Guess")
     guess = st.text_input("Enter your guess:")
     if st.button('Submit Guess'):
+        st.session_state["game_state"]["rules"].append("new_rule")
         check_guess(guess)
 
 
@@ -132,7 +133,7 @@ if prompt := st.chat_input(disabled=not replicate_api):
         st.write(prompt)
         
 # Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
+if st.session_state.messages[-1]["role"] not in ["assistant", "gamemaster"]:
     with st.chat_message("assistant", avatar="./Snowflake_Logomark_blue.svg"):
         response = generate_arctic_response()
         full_response = st.write_stream(response)
