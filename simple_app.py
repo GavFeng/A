@@ -2,9 +2,16 @@ import streamlit as st
 import replicate
 import os
 from transformers import AutoTokenizer
+import time
 
 # Set assistant icon to Snowflake logo
 icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️", "user_anon": "🕵️‍♂️"}
+
+# Timeout threshold in seconds (e.g., 10 minutes)
+TIMEOUT_THRESHOLD = 10
+
+# Initialize last activity time
+last_activity_time = time.time()
 
 # App title
 st.set_page_config(page_title="Snowflake Arctic")
@@ -66,6 +73,18 @@ st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.toggle('Privacy', on_change=private_mode)
 st.sidebar.toggle('Anonymous User', on_change=Anon_mode)
 
+# Function to check for inactivity and perform timeout action
+def check_inactivity():
+    global last_activity_time
+    
+    # Calculate time elapsed since last activity
+    elapsed_time = time.time() - last_activity_time
+    
+    # Check if elapsed time exceeds the timeout threshold
+    if elapsed_time > TIMEOUT_THRESHOLD:
+        # Perform timeout action
+        st.session_state.messages = [{"role": "assistant", "content": "Session timed out due to inactivity."}]
+        st.session_state.chat_aborted = True
 
 @st.cache_resource(show_spinner=False)
 def get_tokenizer():
