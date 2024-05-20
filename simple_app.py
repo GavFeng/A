@@ -18,7 +18,6 @@ def check_guess(prompt):
         st.session_state["game_state"]["rules"].append(new_rule)
         message = {"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}
         st.session_state.messages.append(message)
-        
         st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
         
 # Initialize session state for game
@@ -89,7 +88,6 @@ with st.sidebar:
     guess = st.text_input("Enter your guess:")
     if st.button('Submit Guess'):
         check_guess(guess)
-
 
 @st.cache_resource(show_spinner=False)
 def get_tokenizer():
