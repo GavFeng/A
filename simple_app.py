@@ -58,7 +58,6 @@ def reset_game():
         "rules": []
     }
 
-    
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.button('Reset Game', on_click=reset_game)
 
@@ -123,6 +122,14 @@ if st.session_state.messages[-1]["role"] != "assistant":
         full_response = st.write_stream(response)
     message = {"role": "assistant", "content": full_response}
     st.session_state.messages.append(message)
+    
+    
+# Sidebar for making guesses
+with st.sidebar:
+    st.subheader("Make a Guess")
+    guess = st.text_input("Enter your guess:")
+    if st.button('Submit Guess'):
+        check_guess(guess)
 
 # Display game state
 st.sidebar.subheader("Game State")
