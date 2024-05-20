@@ -11,7 +11,8 @@ icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️", "user_a
 TIMEOUT_THRESHOLD = 10
 
 # Initialize last activity time
-last_activity_time = time.time()
+if "last_activity_time" not in st.session_state:
+    st.session_state.last_activity_time = time.time()
 
 # App title
 st.set_page_config(page_title="Snowflake Arctic")
@@ -88,15 +89,23 @@ st.sidebar.toggle('Timeout', on_change=timeout_mode)
 
 # Function to check for inactivity and perform timeout action
 def check_inactivity():
-    global last_activity_time
+    # Get the current time
+    current_time = time.time()
     
-    # Calculate time elapsed since last activity
-    elapsed_time = time.time() - last_activity_time
+    # Calculate the elapsed time since the last activity
+    elapsed_time = current_time - st.session_state.last_activity_time
+    
+    # Update the last activity time
+    st.session_state.last_activity_time = current_time
     
     # Check if timeout mode is enabled and elapsed time exceeds the timeout threshold
     if st.session_state.timeout_mode and elapsed_time > TIMEOUT_THRESHOLD:
         # Perform timeout action
         st.session_state.messages = [{"role": "assistant", "content": "Session timed out due to inactivity."}]
+        st.session_state.chat_aborted = True
+
+    # Trigger the script to rerun after a short delay
+    st.experimental_set_query_params(_timeout_refreshed=current_time)
 
 
 
