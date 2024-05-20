@@ -43,8 +43,8 @@ def private_mode():
     st.session_state.messages = [{"role": "assistant", "content": "I am now in privacy mode."}]
 
 
-st.sidebar.select_slider('Privacy', on_change=private_mode)
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
+st.sidebar.checkbox('Privacy', on_change=private_mode)
 
 @st.cache_resource(show_spinner=False)
 def get_tokenizer():
