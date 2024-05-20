@@ -46,6 +46,7 @@ for message in st.session_state.messages:
 # Function to clear chat history
 def clear_chat_history():
     st.session_state.messages = [{"role": "assistant", "content": "Hi. I'm Arctic, a new, efficient, intelligent, and truly open language model created by Snowflake AI Research. Ask me anything."}]
+    st.session_state.messages = [{"role": "assistant", "content": "Correct guess! The password '{password}' was found."}]
     st.session_state.chat_aborted = False
     st.session_state["game_state"]["guessed"] = []
     st.session_state["game_state"]["rules"] = []
