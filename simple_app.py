@@ -49,9 +49,16 @@ def private_mode():
     else:
         st.session_state.messages.append({"role": "assistant", "content": "Privacy mode deactivated."})
         st.session_state.private_mode = False
+        
+def private_mode():
+    icons["user"] = "🕵️‍♂️" 
+
+        
 
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.toggle('Privacy', on_change=private_mode)
+st.sidebar.toggle('Anonymous User', on_change=Anon_mode)
+
 
 @st.cache_resource(show_spinner=False)
 def get_tokenizer():
