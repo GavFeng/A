@@ -7,7 +7,7 @@ import time
 # Set assistant icon to Snowflake logo
 icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️", "user_anon": "🕵️‍♂️"}
 
-# Timeout threshold in seconds (e.g., 10 minutes)
+# Timeout threshold in seconds
 TIMEOUT_THRESHOLD = 10
 
 # Initialize last activity time
@@ -79,7 +79,6 @@ def check_inactivity():
     
     # Calculate time elapsed since last activity
     elapsed_time = time.time() - last_activity_time
-    
     # Check if elapsed time exceeds the timeout threshold
     if elapsed_time > TIMEOUT_THRESHOLD:
         # Perform timeout action
