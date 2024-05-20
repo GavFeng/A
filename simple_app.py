@@ -64,10 +64,10 @@ def Anon_mode():
         st.session_state.Anon_mode = False
         
     if not st.session_state.Anon_mode:
-        st.session_state.messages.append({"role": "assistant", "content": "I am now in Anonymous mode."})
+        st.toast('Privacy mode Enabled!', icon='🕵️‍♂️')
         st.session_state.Anon_mode = True
     else:
-        st.session_state.messages.append({"role": "assistant", "content": "Privacy mode deactivated."})
+        st.toast('Privacy mode Disabled!', icon='⛷️')
         st.session_state.Anon_mode = False
         
 def timeout_mode():
