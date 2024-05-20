@@ -40,7 +40,15 @@ def clear_chat_history():
     st.session_state.chat_aborted = False
     
 def private_mode():
-    st.session_state.messages = [{"role": "assistant", "content": "I am now in privacy mode."}]
+    if "private_mode" not in st.session_state:
+        st.session_state.private_mode = False
+        
+    if not st.session_state.private_mode:
+        st.session_state.messages.append({"role": "assistant", "content": "I am now in privacy mode."})
+        st.session_state.private_mode = True
+    else:
+        st.session_state.messages.append({"role": "assistant", "content": "Privacy mode deactivated."})
+        st.session_state.private_mode = False
 
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.toggle('Privacy', on_change=private_mode)
