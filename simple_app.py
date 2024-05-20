@@ -77,7 +77,7 @@ def check_guess(prompt):
         # Add a new rule
         new_rule = f"AAA"
         st.session_state["game_state"]["rules"].append(new_rule)
-        st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
+        st.session_state.messages.append({"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."})
         st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
 
 
@@ -133,7 +133,7 @@ if prompt := st.chat_input(disabled=not replicate_api):
         st.write(prompt)
         
 # Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
+if st.session_state.messages[-1]["role"] not in ["assistant", "gamemaster"]:
     with st.chat_message("assistant", avatar="./Snowflake_Logomark_blue.svg"):
         response = generate_arctic_response()
         full_response = st.write_stream(response)
