@@ -64,7 +64,7 @@ st.sidebar.button('Reset Game', on_click=reset_game)
 # Display game state
 st.sidebar.subheader("Game State")
 st.sidebar.write(f"Guessed Words: {', '.join(st.session_state['game_state']['guessed'])}")
-st.sidebar.write("Rules Added")
+st.sidebar.write("Rules Added:")
 for rule in st.session_state["game_state"]["rules"]:
     st.sidebar.write(f"- {rule}")
 
