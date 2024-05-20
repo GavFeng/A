@@ -97,7 +97,7 @@ def check_inactivity():
     if st.session_state.timeout_mode and elapsed_time > TIMEOUT_THRESHOLD:
         # Perform timeout action
         st.session_state.messages = [{"role": "assistant", "content": "Session timed out due to inactivity."}]
-        st.session_state.chat_aborted = True
+
 
 
 @st.cache_resource(show_spinner=False)
