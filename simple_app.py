@@ -56,11 +56,43 @@ def reset_game():
     st.session_state["game_state"] = {
         "password": "arctic",
         "guessed": [],
-        "rules": []
+        "rules": ["NO"]
     }
 
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.button('Reset Game', on_click=reset_game)
+
+
+# Sidebar for making guesses
+with st.sidebar:
+    st.subheader("Make a Guess")
+    guess = st.text_input("Enter your guess:")
+    if st.button('Submit Guess'):
+        st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
+        check_guess(guess)
+
+# Display game state
+st.sidebar.subheader("Game State")
+st.sidebar.write(f"Current Password Status: {' '.join([letter if letter in st.session_state['game_state']['guessed'] else '_' for letter in st.session_state['game_state']['password']])}")
+st.sidebar.write(f"Guessed Words: {', '.join(st.session_state['game_state']['guessed'])}")
+st.sidebar.write("Rules Added by AI:")
+for rule in st.session_state["game_state"]["rules"]:
+    st.sidebar.write(f"- {rule}")
+
+
+# Check guesses and update game state
+def check_guess(prompt):
+    guessed = st.session_state["game_state"]["guessed"]
+    password = st.session_state["game_state"]["password"]
+    if password in prompt:
+        guessed.append(password)
+        # Add a new rule
+        new_rule = f"----"
+        st.session_state["game_state"]["rules"].append(new_rule)
+        st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
+        st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
+
+
 
 @st.cache_resource(show_spinner=False)
 def get_tokenizer():
@@ -103,19 +135,7 @@ if prompt := st.chat_input(disabled=not replicate_api):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="⛷️"):
         st.write(prompt)
-
-# Check guesses and update game state
-def check_guess(prompt):
-    guessed = st.session_state["game_state"]["guessed"]
-    password = st.session_state["game_state"]["password"]
-    if password in prompt:
-        guessed.append(password)
-        # Add a new rule
-        new_rule = f"----"
-        st.session_state["game_state"]["rules"].append(new_rule)
-        st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
-        st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
-
+        
 # Generate a new response if last message is not from assistant
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant", avatar="./Snowflake_Logomark_blue.svg"):
@@ -124,19 +144,3 @@ if st.session_state.messages[-1]["role"] != "assistant":
     message = {"role": "assistant", "content": full_response}
     st.session_state.messages.append(message)
     
-    
-# Sidebar for making guesses
-with st.sidebar:
-    st.subheader("Make a Guess")
-    guess = st.text_input("Enter your guess:")
-    if st.button('Submit Guess'):
-        st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
-        check_guess(guess)
-
-# Display game state
-st.sidebar.subheader("Game State")
-st.sidebar.write(f"Current Password Status: {' '.join([letter if letter in st.session_state['game_state']['guessed'] else '_' for letter in st.session_state['game_state']['password']])}")
-st.sidebar.write(f"Guessed Words: {', '.join(st.session_state['game_state']['guessed'])}")
-st.sidebar.write("Rules Added by AI:")
-for rule in st.session_state["game_state"]["rules"]:
-    st.sidebar.write(f"- {rule}")
