@@ -4,7 +4,8 @@ import os
 from transformers import AutoTokenizer
 
 # Set assistant icon to Snowflake logo
-icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️"}
+icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️", "gamemaster": "🧊"}
+
 
 
 # Initialize session state for game
@@ -110,7 +111,7 @@ def check_guess(prompt):
     if password in prompt:
         guessed.append(password)
         # Add a new rule
-        new_rule = f"New rule added after guessing the password '{password}'"
+        new_rule = f"----"
         st.session_state["game_state"]["rules"].append(new_rule)
         st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
         st.session_state["game_state"]["password"] = "snowflake"  # Update password for the next round
@@ -129,6 +130,7 @@ with st.sidebar:
     st.subheader("Make a Guess")
     guess = st.text_input("Enter your guess:")
     if st.button('Submit Guess'):
+        st.session_state.messages = [{"role": "gamemaster", "content": "Correct guess! The password '{password}' was found."}]
         check_guess(guess)
 
 # Display game state
