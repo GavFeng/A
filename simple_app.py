@@ -25,6 +25,7 @@ with st.sidebar:
     st.subheader("Adjust model parameters")
     temperature = st.sidebar.slider('temperature', min_value=0.01, max_value=5.0, value=0.3, step=0.01)
     top_p = st.sidebar.slider('top_p', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
+    chat_sessions = st.sidebar.slider('Chat Sessions Saved', min_value=1, max_value=25, value=15, step=1)
 
 # Store LLM-generated responses
 if "messages" not in st.session_state.keys():
@@ -63,11 +64,10 @@ def Anon_mode():
         st.toast('Anonymous mode Disabled!', icon='⛷️')
         st.session_state.Anon_mode = False
         
-
-
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.toggle('Privacy', on_change=private_mode)
 st.sidebar.toggle('Anonymous User', on_change=Anon_mode)
+
 
 @st.cache_resource(show_spinner=False)
 def get_tokenizer():
