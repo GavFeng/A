@@ -46,10 +46,10 @@ def private_mode():
         st.session_state.private_mode = False
         
     if not st.session_state.private_mode:
-        st.session_state.messages.append({"role": "assistant", "content": "I am now in privacy mode."})
+        st.toast('Privacy mode Enabled!', icon='🛡️')
         st.session_state.private_mode = True
     else:
-        st.session_state.messages.append({"role": "assistant", "content": "Privacy mode deactivated."})
+        st.toast('Privacy mode Disabled!', icon='🔓')
         st.session_state.private_mode = False
         
 def Anon_mode():
