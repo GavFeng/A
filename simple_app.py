@@ -7,13 +7,6 @@ import time
 # Set assistant icon to Snowflake logo
 icons = {"assistant": "./Snowflake_Logomark_blue.svg", "user": "⛷️", "user_anon": "🕵️‍♂️"}
 
-# Timeout threshold in seconds
-TIMEOUT_THRESHOLD = 10
-
-# Initialize last activity time
-if "last_activity_time" not in st.session_state:
-    st.session_state.last_activity_time = time.time()
-
 # App title
 st.set_page_config(page_title="Snowflake Arctic")
 
@@ -70,41 +63,11 @@ def Anon_mode():
         st.toast('Anonymous mode Disabled!', icon='⛷️')
         st.session_state.Anon_mode = False
         
-def timeout_mode():
-    if "timeout_mode" not in st.session_state:
-        st.session_state.timeout_mode = False
-        
-    if not st.session_state.timeout_mode:
-        st.session_state.messages.append({"role": "assistant", "content": "Automatic timeout mode enabled."})
-        st.session_state.timeout_mode = True
-    else:
-        st.session_state.messages.append({"role": "assistant", "content": "Automatic timeout mode disabled."})
-        st.session_state.timeout_mode = False
-        
-    if st.session_state.timeout_mode:
-        check_inactivity()
 
 
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.toggle('Privacy', on_change=private_mode)
 st.sidebar.toggle('Anonymous User', on_change=Anon_mode)
-st.sidebar.toggle('Timeout', on_change=timeout_mode)
-
-# Function to check for inactivity and perform timeout action
-def check_inactivity():
-    # Get the current time
-    current_time = time.time()
-    
-    # Calculate the elapsed time since the last activity
-    elapsed_time = current_time - st.session_state.last_activity_time
-    
-    # Update the last activity time
-    st.session_state.last_activity_time = current_time
-    
-    # Check if timeout mode is enabled and elapsed time exceeds the timeout threshold
-    if st.session_state.timeout_mode and elapsed_time > TIMEOUT_THRESHOLD:
-        # Perform timeout action
-        st.session_state.messages.append({"role": "assistant", "content": "Session timed out due to inactivity."})
 
 @st.cache_resource(show_spinner=False)
 def get_tokenizer():
