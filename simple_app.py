@@ -114,11 +114,11 @@ if prompt := st.chat_input(disabled=not replicate_api):
     if st.session_state.Anon_mode:
         st.session_state.messages.append({"role": "user_anon", "content": prompt})
         with st.chat_message("user", avatar=icons["user_anon"]):
-        st.write(prompt)
+            st.write(prompt)
     else:   
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user", avatar=icons["user"]):
-        st.write(prompt)       
+            st.write(prompt)       
 
         
 # Generate a new response if last message is not from assistant
