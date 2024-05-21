@@ -68,9 +68,9 @@ st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.toggle('Privacy', on_change=private_mode)
 st.sidebar.toggle('Anonymous User', on_change=Anon_mode)
 
-# if st.sidebar.button('Open Popup'):
-#     with st.expander("Large Popup"):
-#         st.write("This is a large popup containing detailed information or additional options.")
+if st.sidebar.button('Open Popup'):
+    with st.expander("Large Popup"):
+        st.write("This is a large popup containing detailed information or additional options.")
 
 @st.cache_resource(show_spinner=False)
 def get_tokenizer():
