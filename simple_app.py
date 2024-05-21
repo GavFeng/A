@@ -108,7 +108,11 @@ def generate_arctic_response():
 
 # User-provided prompt
 if prompt := st.chat_input(disabled=not replicate_api):
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    if st.session_state.Anon_mode:
+        st.session_state.messages.append({"role": "user_anon", "content": prompt})
+    else:   
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        
     if st.session_state.Anon_mode:
         with st.chat_message("user", avatar=icons["user_anon"]):
             st.write(prompt)
