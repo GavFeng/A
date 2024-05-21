@@ -55,7 +55,7 @@ def private_mode():
         
 def Anon_mode():
     if "Anon_mode" not in st.session_state:
-        st.session_state.Anon_mode = False
+        st.session_state.Anon_mode = True
         
     if not st.session_state.Anon_mode:
         st.toast('Anonymous mode Enabled!', icon='🕵️‍♂️')
