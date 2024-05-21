@@ -64,6 +64,9 @@ def Anon_mode():
         st.toast('Anonymous mode Disabled!', icon='⛷️')
         st.session_state.Anon_mode = False
         
+if "Anon_mode" not in st.session_state:
+    st.session_state.Anon_mode = True
+
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.toggle('Privacy', on_change=private_mode)
 st.sidebar.toggle('Anonymous User', on_change=Anon_mode)
