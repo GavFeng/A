@@ -24,9 +24,14 @@ with st.sidebar:
     os.environ['REPLICATE_API_TOKEN'] = replicate_api
     
     chat_token = st.text_input('Enter Your Chat Token:', type='password')
-    if chat_token != "penguin":
+    if chat_token:
+        if chat_token == "penguin":
+            st.success('Token accepted.')
+        else:
+            st.warning('Invalid Chat Token.', icon='⚠️')
+            st.markdown("**Forgot your token?** Hint: penguin")
+    else:
         st.warning('Please enter your Chat Token.', icon='⚠️')
-        st.markdown("**Forgot your token?** Hint: penguin")
         
     st.subheader("Adjust model parameters")
     temperature = st.sidebar.slider('temperature', min_value=0.01, max_value=5.0, value=0.3, step=0.01)
