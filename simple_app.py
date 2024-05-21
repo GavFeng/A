@@ -21,6 +21,11 @@ with st.sidebar:
             st.warning('Please enter your Replicate API token.', icon='⚠️')
             st.markdown("**Don't have an API token?** Head over to [Replicate](https://replicate.com) to sign up for one.")
 
+    replicate_api = st.text_input('Enter Your Chat Token:', type='password')
+    if not ("penguin"):
+        st.warning('Please enter your Chat Token.', icon='⚠️')
+        st.markdown("**Forgot your token?** Hint: penguin")
+        
     os.environ['REPLICATE_API_TOKEN'] = replicate_api
     st.subheader("Adjust model parameters")
     temperature = st.sidebar.slider('temperature', min_value=0.01, max_value=5.0, value=0.3, step=0.01)
@@ -70,6 +75,8 @@ if "Anon_mode" not in st.session_state:
 st.sidebar.button('Clear chat history', on_click=clear_chat_history)
 st.sidebar.toggle('Privacy', on_change=private_mode)
 st.sidebar.toggle('Anonymous User', on_change=Anon_mode)
+
+
 
 if st.sidebar.button('Open Popup'):
     with st.expander("Large Popup"):
