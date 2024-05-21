@@ -24,7 +24,7 @@ with st.sidebar:
     os.environ['REPLICATE_API_TOKEN'] = replicate_api
     
     chat_token = st.text_input('Enter Your Chat Token:', type='password')
-    if not ("penguin"):
+    if chat_token != "penguin":
         st.warning('Please enter your Chat Token.', icon='⚠️')
         st.markdown("**Forgot your token?** Hint: penguin")
         
